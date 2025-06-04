@@ -38,10 +38,19 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'core',
-    'rest_framework'
+    'rest_framework',
+    'corsheaders'
 ]
 
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",  # for local React dev
+    "https://your-frontend-domain.com",  # replace with deployed frontend later
+]
+
+
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
