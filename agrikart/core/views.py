@@ -8,9 +8,6 @@ from django.contrib.auth.models import User
 from .serializers import UserSignupSerializer
 
 
-def redirect_root(request):
-    return HttpResponseRedirect('/api/')
-
 
 class FarmerViewSet(viewsets.ModelViewSet):
     queryset = Farmer.objects.all()
