@@ -3,7 +3,6 @@ from .views import redirect_root
 from rest_framework.routers import DefaultRouter
 from .views import *
 
-
 router = DefaultRouter()
 router.register(r'farmers', FarmerViewSet)
 router.register(r'clients', ClientViewSet)
@@ -14,6 +13,4 @@ router.register(r'deliveries', DeliveryViewSet)
 
 urlpatterns = [
     path('api/', include(router.urls)),
-    path('', include(router.urls)),
-    path('signup/', UserSignupView.as_view(), name='signup'),
 ]
