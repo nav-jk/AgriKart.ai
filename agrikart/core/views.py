@@ -3,6 +3,10 @@ from .models import Farmer, Client, CollectionPoint, Produce, Order, Delivery
 from .serializers import *\
 
 from django.http import HttpResponseRedirect
+from rest_framework import generics
+from django.contrib.auth.models import User
+from .serializers import UserSignupSerializer
+
 
 def redirect_root(request):
     return HttpResponseRedirect('/api/')
@@ -31,4 +35,7 @@ class OrderViewSet(viewsets.ModelViewSet):
 class DeliveryViewSet(viewsets.ModelViewSet):
     queryset = Delivery.objects.all()
     serializer_class = DeliverySerializer
-
+    
+class UserSignupView(generics.CreateAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSignupSerializer
