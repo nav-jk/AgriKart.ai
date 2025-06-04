@@ -1,6 +1,12 @@
 from rest_framework import viewsets
 from .models import Farmer, Client, CollectionPoint, Produce, Order, Delivery
-from .serializers import *
+from .serializers import *\
+
+from django.http import HttpResponseRedirect
+
+def redirect_root(request):
+    return HttpResponseRedirect('/api/')
+
 
 class FarmerViewSet(viewsets.ModelViewSet):
     queryset = Farmer.objects.all()
@@ -25,3 +31,4 @@ class OrderViewSet(viewsets.ModelViewSet):
 class DeliveryViewSet(viewsets.ModelViewSet):
     queryset = Delivery.objects.all()
     serializer_class = DeliverySerializer
+
