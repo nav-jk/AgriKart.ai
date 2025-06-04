@@ -12,6 +12,5 @@ router.register(r'orders', OrderViewSet)
 router.register(r'deliveries', DeliveryViewSet)
 
 urlpatterns = [
-    path('', redirect_root),
     path('api/', include(router.urls)),
 ]
