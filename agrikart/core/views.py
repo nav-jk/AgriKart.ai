@@ -53,3 +53,37 @@ class CustomTokenSerializer(TokenObtainPairSerializer):
 
 class CustomTokenView(TokenObtainPairView):
     serializer_class = CustomTokenSerializer
+
+
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from .models import Client, Produce, Farmer, CollectionPoint
+from django.utils.timezone import now
+
+@api_view(['POST'])
+def seed_data(request):
+    # Optional: clear previous test data
+    Client.objects.filter(name__startswith="Test").delete()
+    Produce.objects.filter(crop_name__startswith="Test").delete()
+    Farmer.objects.filter(name__startswith="SeedFarmer").delete()
+    CollectionPoint.objects.filter(name__startswith="SeedPoint").delete()
+
+    # Create dummy farmer + collection point (needed for FK)
+    farmer = Farmer.objects.create(name="SeedFarmer", phone="1234567890", village="TestVille", registered_via_whatsapp=True)
+    collection_point = CollectionPoint.objects.create(name="SeedPoint", location="11.11,22.22")
+
+    # Create test produce
+    crops = ["Tomato", "Cabbage", "Carrot", "Potato"]
+    for i, crop in enumerate(crops):
+        Produce.objects.create(
+            farmer=farmer,
+            crop_name=f"Test {crop}",
+            quantity_kg=50 + i * 10,
+            status="available",
+            collection_point=collection_point
+        )
+
+    # Create test buyer (client)
+    Client.objects.create(name="TestBuyer", email="buyer@example.com", address="123 Market St")
+
+    return Response({"message": "Seed data added successfully ✅"})

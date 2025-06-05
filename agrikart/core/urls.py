@@ -16,3 +16,10 @@ urlpatterns = [
     path('signup/', UserSignupView.as_view(), name='signup'),
     path('token/', CustomTokenView.as_view(), name='token_obtain_pair'),
 ]
+
+from django.urls import path, include
+from .views import seed_data
+
+urlpatterns += [
+    path('dev/seed/', seed_data),
+]
