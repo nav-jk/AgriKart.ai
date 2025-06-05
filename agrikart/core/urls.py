@@ -13,4 +13,5 @@ router.register(r'deliveries', DeliveryViewSet)
 
 urlpatterns = [
     path('api/', include(router.urls)),
+    path('signup/', UserSignupView.as_view(), name='signup'),
 ]
