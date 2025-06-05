@@ -12,6 +12,6 @@ router.register(r'orders', OrderViewSet)
 router.register(r'deliveries', DeliveryViewSet)
 
 urlpatterns = [
-    path('api/', include(router.urls)),
+    path('', include(router.urls)),  # ⚠️ Use '' instead of 'api/'
     path('signup/', UserSignupView.as_view(), name='signup'),
 ]
