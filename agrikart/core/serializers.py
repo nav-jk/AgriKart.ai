@@ -2,6 +2,8 @@ from rest_framework import serializers
 from .models import Farmer, Client, CollectionPoint, Produce, Order, Delivery
 from django.contrib.auth.models import User
 from rest_framework import serializers
+from .models import UserProfile  
+
 
 
 class FarmerSerializer(serializers.ModelSerializer):
@@ -34,11 +36,15 @@ class DeliverySerializer(serializers.ModelSerializer):
         model = Delivery
         fields = '__all__'
 class UserSignupSerializer(serializers.ModelSerializer):
+    role = serializers.ChoiceField(choices=[('farmer', 'Farmer'), ('buyer', 'Buyer')])
+
     class Meta:
         model = User
-        fields = ['username', 'email', 'password']
+        fields = ['username', 'email', 'password', 'role']
         extra_kwargs = {'password': {'write_only': True}}
 
     def create(self, validated_data):
+        role = validated_data.pop('role')
         user = User.objects.create_user(**validated_data)
+        UserProfile.objects.filter(user=user).update(role=role)
         return user

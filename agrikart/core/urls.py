@@ -14,4 +14,5 @@ router.register(r'deliveries', DeliveryViewSet)
 urlpatterns = [
     path('', include(router.urls)),  # ⚠️ Use '' instead of 'api/'
     path('signup/', UserSignupView.as_view(), name='signup'),
+    path('token/', CustomTokenView.as_view(), name='token_obtain_pair'),
 ]
