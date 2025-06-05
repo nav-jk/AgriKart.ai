@@ -36,16 +36,29 @@ class DeliverySerializer(serializers.ModelSerializer):
         model = Delivery
         fields = '__all__'
 class UserSignupSerializer(serializers.ModelSerializer):
-    role = serializers.ChoiceField(choices=[('farmer', 'Farmer'), ('buyer', 'Buyer')])
+    # Accept role as input during signup
+    role = serializers.ChoiceField(
+        choices=[('farmer', 'Farmer'), ('buyer', 'Buyer')],
+        write_only=True
+    )
+
+    # Show role after user creation (read-only)
+    role_display = serializers.SerializerMethodField()
 
     class Meta:
         model = User
-        fields = ['username', 'email', 'password', 'role']
+        fields = ['username', 'email', 'password', 'role', 'role_display']
         extra_kwargs = {'password': {'write_only': True}}
 
     def create(self, validated_data):
         role = validated_data.pop('role')
         user = User.objects.create_user(**validated_data)
-        UserProfile.objects.create(user=user, role=role)  # <- create the profile
+        UserProfile.objects.create(user=user, role=role)
         return user
 
+    def get_role_display(self, obj):
+        # Make sure the userprofile exists
+        try:
+            return obj.userprofile.role
+        except UserProfile.DoesNotExist:
+            return None
