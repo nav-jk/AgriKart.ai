@@ -7,15 +7,21 @@ const Login = () => {
   const { login } = useContext(AuthContext);
   const navigate = useNavigate();
 
-  const handleSubmit = async e => {
-    e.preventDefault();
-    try {
-      await login(form.username, form.password);
+const handleSubmit = async e => {
+  e.preventDefault();
+  try {
+    await login(form.username, form.password);
+    const role = localStorage.getItem("role");
+    if (role === "farmer") {
       navigate("/dashboard");
-    } catch (err) {
-      alert("Login failed");
+    } else {
+      navigate("/home");
     }
-  };
+  } catch (err) {
+    alert("Login failed");
+  }
+};
+
 
   return (
     <form onSubmit={handleSubmit}>
