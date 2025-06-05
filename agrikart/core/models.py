@@ -10,6 +10,7 @@ class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     role = models.CharField(max_length=10, choices=ROLE_CHOICES)
 
+
 class Farmer(models.Model):
     name = models.CharField(max_length=100)
     phone = models.CharField(max_length=15)
@@ -66,10 +67,3 @@ class Delivery(models.Model):
     vehicle_type = models.CharField(max_length=50)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='scheduled')
 
-class UserProfile(models.Model):
-    ROLE_CHOICES = [
-        ('farmer', 'Farmer'),
-        ('buyer', 'Buyer'),
-    ]
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    role = models.CharField(max_length=10, choices=ROLE_CHOICES)
