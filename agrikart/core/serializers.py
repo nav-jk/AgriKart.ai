@@ -35,30 +35,27 @@ class DeliverySerializer(serializers.ModelSerializer):
     class Meta:
         model = Delivery
         fields = '__all__'
-class UserSignupSerializer(serializers.ModelSerializer):
-    # Accept role as input during signup
-    role = serializers.ChoiceField(
-        choices=[('farmer', 'Farmer'), ('buyer', 'Buyer')],
-        write_only=True
-    )
+from .models import UserProfile, Client
 
-    # Show role after user creation (read-only)
-    role_display = serializers.SerializerMethodField()
+class UserSignupSerializer(serializers.ModelSerializer):
+    role = serializers.ChoiceField(choices=[('farmer', 'Farmer'), ('buyer', 'Buyer')], write_only=True)
+    role_display = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = User
         fields = ['username', 'email', 'password', 'role', 'role_display']
         extra_kwargs = {'password': {'write_only': True}}
 
+    def get_role_display(self, obj):
+        return obj.userprofile.role if hasattr(obj, 'userprofile') else None
+
     def create(self, validated_data):
         role = validated_data.pop('role')
         user = User.objects.create_user(**validated_data)
         UserProfile.objects.create(user=user, role=role)
+
+        if role == "buyer":
+            Client.objects.create(name=user.username, email=user.email, address="")
+
         return user
 
-    def get_role_display(self, obj):
-        # Make sure the userprofile exists
-        try:
-            return obj.userprofile.role
-        except UserProfile.DoesNotExist:
-            return None
