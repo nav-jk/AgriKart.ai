@@ -7,28 +7,41 @@ const Login = () => {
   const { login } = useContext(AuthContext);
   const navigate = useNavigate();
 
-const handleSubmit = async e => {
-  e.preventDefault();
-  try {
-    await login(form.username, form.password);
-    const role = localStorage.getItem("role");
-    if (role === "farmer") {
-      navigate("/dashboard");
-    } else {
-      navigate("/home");
-    }
-  } catch (err) {
-    alert("Login failed");
-  }
-};
+  const handleSubmit = async e => {
+    e.preventDefault();
+    try {
+      await login(form.username, form.password);
+      const role = localStorage.getItem("role");
 
+      // Role-based routing
+      if (role === "farmer") {
+        navigate("/farmer/dashboard");
+      } else if (role === "buyer") {
+        navigate("/buyer/marketplace");
+      } else {
+        navigate("/"); // Fallback route
+      }
+    } catch (err) {
+      alert("Login failed. Please check your credentials.");
+      console.error("Login error:", err);
+    }
+  };
 
   return (
     <form onSubmit={handleSubmit}>
       <h2>Login</h2>
-      <input placeholder="Username" onChange={e => setForm({ ...form, username: e.target.value })} />
-      <input type="password" placeholder="Password" onChange={e => setForm({ ...form, password: e.target.value })} />
-      <button>Login</button>
+      <input
+        placeholder="Username"
+        onChange={e => setForm({ ...form, username: e.target.value })}
+        required
+      />
+      <input
+        type="password"
+        placeholder="Password"
+        onChange={e => setForm({ ...form, password: e.target.value })}
+        required
+      />
+      <button type="submit">Login</button>
     </form>
   );
 };
