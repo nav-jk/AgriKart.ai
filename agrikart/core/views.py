@@ -95,11 +95,14 @@ def seed_data(request):
 
 
 class OrderViewSet(viewsets.ModelViewSet):
-    queryset = Order.objects.all()
     serializer_class = OrderSerializer
     permission_classes = [IsAuthenticated]
 
+    def get_queryset(self):
+        # Return only orders for the current logged-in user
+        client = Client.objects.filter(user=self.request.user).first()
+        return Order.objects.filter(client=client)
+
     def perform_create(self, serializer):
-        user = self.request.user
-        client = Client.objects.filter(name=user.username).first()
+        client = Client.objects.get(user=self.request.user)
         serializer.save(client=client)

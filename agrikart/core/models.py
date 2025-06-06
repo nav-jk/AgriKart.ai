@@ -19,9 +19,9 @@ class Farmer(models.Model):
     address = models.CharField(max_length=255, default='')
 
 class Client(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='client_profile')
     name = models.CharField(max_length=100)
     email = models.EmailField()
-    address = models.TextField()
     address = models.CharField(max_length=255, default='')
 
 class CollectionPoint(models.Model):

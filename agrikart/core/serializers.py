@@ -61,7 +61,13 @@ class UserSignupSerializer(serializers.ModelSerializer):
         UserProfile.objects.create(user=user, role=role)
 
         if role == 'buyer':
-            Client.objects.create(name=user.username, email=user.email, address=address)
+            Client.objects.create(
+                user=user,  # ✅ Link to auth user
+                name=user.username,
+                email=user.email,
+                address=address
+            )
+
         elif role == 'farmer':
             Farmer.objects.create(name=user.username, phone="0000000000", village="Unknown", registered_via_whatsapp=True, address=address)
 
