@@ -41,7 +41,7 @@ from .models import UserProfile, Client
 
 class UserSignupSerializer(serializers.ModelSerializer):
     role = serializers.ChoiceField(choices=[('farmer', 'Farmer'), ('buyer', 'Buyer')])
-    address = serializers.CharField(max_length=255, required=True, allow_blank=False)
+    address = serializers.CharField(max_length=255)
 
     class Meta:
         model = User
@@ -53,12 +53,9 @@ class UserSignupSerializer(serializers.ModelSerializer):
         address = validated_data.pop('address')
         user = User.objects.create_user(**validated_data)
 
-        # Create or update profile with role
-        profile = user.userprofile
-        profile.role = role
-        profile.save()
+        # 👇 Manually create the UserProfile immediately
+        UserProfile.objects.create(user=user, role=role)
 
-        # Create corresponding model with address
         if role == 'buyer':
             Client.objects.create(name=user.username, email=user.email, address=address)
         elif role == 'farmer':
