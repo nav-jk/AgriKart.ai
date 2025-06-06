@@ -29,7 +29,9 @@ class ProduceSerializer(serializers.ModelSerializer):
 class OrderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order
-        fields = '__all__'
+        exclude = []  # temporarily allow all fields
+        read_only_fields = ['client']  # ensure frontend can't override
+
 
 class DeliverySerializer(serializers.ModelSerializer):
     class Meta:
@@ -38,24 +40,28 @@ class DeliverySerializer(serializers.ModelSerializer):
 from .models import UserProfile, Client
 
 class UserSignupSerializer(serializers.ModelSerializer):
-    role = serializers.ChoiceField(choices=[('farmer', 'Farmer'), ('buyer', 'Buyer')], write_only=True)
-    role_display = serializers.SerializerMethodField(read_only=True)
+    role = serializers.ChoiceField(choices=[('farmer', 'Farmer'), ('buyer', 'Buyer')])
+    address = serializers.CharField(max_length=255, required=True, allow_blank=False)
 
     class Meta:
         model = User
-        fields = ['username', 'email', 'password', 'role', 'role_display']
+        fields = ['username', 'email', 'password', 'role', 'address']
         extra_kwargs = {'password': {'write_only': True}}
-
-    def get_role_display(self, obj):
-        return obj.userprofile.role if hasattr(obj, 'userprofile') else None
 
     def create(self, validated_data):
         role = validated_data.pop('role')
+        address = validated_data.pop('address')
         user = User.objects.create_user(**validated_data)
-        UserProfile.objects.create(user=user, role=role)
 
-        if role == "buyer":
-            Client.objects.create(name=user.username, email=user.email, address="")
+        # Create or update profile with role
+        profile = user.userprofile
+        profile.role = role
+        profile.save()
+
+        # Create corresponding model with address
+        if role == 'buyer':
+            Client.objects.create(name=user.username, email=user.email, address=address)
+        elif role == 'farmer':
+            Farmer.objects.create(name=user.username, phone="0000000000", village="Unknown", registered_via_whatsapp=True, address=address)
 
         return user
-

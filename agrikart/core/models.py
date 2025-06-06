@@ -16,11 +16,13 @@ class Farmer(models.Model):
     phone = models.CharField(max_length=15)
     village = models.CharField(max_length=100)
     registered_via_whatsapp = models.BooleanField(default=True)
+    address = models.CharField(max_length=255, default='')
 
 class Client(models.Model):
     name = models.CharField(max_length=100)
     email = models.EmailField()
     address = models.TextField()
+    address = models.CharField(max_length=255, default='')
 
 class CollectionPoint(models.Model):
     name = models.CharField(max_length=100)
