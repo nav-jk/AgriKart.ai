@@ -19,7 +19,8 @@ class Farmer(models.Model):
     address = models.CharField(max_length=255, default='')
 
 class Client(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='client_profile')
+    # In models.py
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='client_profile', null=True, blank=True)
     name = models.CharField(max_length=100)
     email = models.EmailField()
     address = models.CharField(max_length=255, default='')
