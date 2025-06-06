@@ -8,22 +8,14 @@ const Checkout = () => {
   const { cart, clearCart } = useContext(CartContext);
   const navigate = useNavigate();
 
-  const clientName = localStorage.getItem("username");
-
   const handlePlaceOrder = async () => {
     try {
-      // Get client ID
-      const clientRes = await api.get("clients/");
-      const client = clientRes.data.find(c => c.name === clientName);
-      if (!client) throw new Error("Client not found");
-
       // Create orders for each cart item
       for (const item of cart) {
         await api.post("orders/", {
-          client: client.id,
           produce: item.id,
           quantity_kg: item.quantity_kg,
-          scheduled_time: new Date().toISOString(), // You can enhance this with a time picker
+          scheduled_time: new Date().toISOString(), // Optional: use date picker
         });
       }
 
