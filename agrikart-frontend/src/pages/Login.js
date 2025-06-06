@@ -1,6 +1,7 @@
 import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
+import "./Login.css"; // Using the new styles matching signup
 
 const Login = () => {
   const [form, setForm] = useState({ username: "", password: "" });
@@ -13,13 +14,12 @@ const Login = () => {
       await login(form.username, form.password);
       const role = localStorage.getItem("role");
 
-      // Role-based routing
       if (role === "farmer") {
         navigate("/farmer/dashboard");
       } else if (role === "buyer") {
         navigate("/buyer/marketplace");
       } else {
-        navigate("/"); // Fallback route
+        navigate("/");
       }
     } catch (err) {
       alert("Login failed. Please check your credentials.");
@@ -28,21 +28,30 @@ const Login = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <h2>Login</h2>
-      <input
-        placeholder="Username"
-        onChange={e => setForm({ ...form, username: e.target.value })}
-        required
-      />
-      <input
-        type="password"
-        placeholder="Password"
-        onChange={e => setForm({ ...form, password: e.target.value })}
-        required
-      />
-      <button type="submit">Login</button>
-    </form>
+    <div className="login-container">
+      <form onSubmit={handleSubmit} className="login-form">
+        <h2>Welcome Back</h2>
+        <input
+          type="text"
+          placeholder="Username"
+          value={form.username}
+          onChange={e => setForm({ ...form, username: e.target.value })}
+          required
+        />
+        <input
+          type="password"
+          placeholder="Password"
+          value={form.password}
+          onChange={e => setForm({ ...form, password: e.target.value })}
+          required
+        />
+        <button type="submit">Login</button>
+
+        <div className="signup-redirect">
+          Don't have an account? <span onClick={() => navigate("/signup")}>Sign up</span>
+        </div>
+      </form>
+    </div>
   );
 };
 

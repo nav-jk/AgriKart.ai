@@ -1,0 +1,93 @@
+.orders-page {
+  padding: 2rem;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f9fafb;
+}
+
+.orders-page h2 {
+  text-align: center;
+  color: #1f2937;
+  margin-bottom: 1.5rem;
+}
+
+.loading {
+  text-align: center;
+  font-size: 1rem;
+  color: #4b5563;
+}
+
+.empty-orders {
+  text-align: center;
+  color: #6b7280;
+}
+
+.empty-orders img {
+  width: 160px;
+  margin-bottom: 1rem;
+  opacity: 0.7;
+}
+
+.order-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.order-card {
+  background-color: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 1.2rem;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.04);
+}
+
+.order-card h3 {
+  margin: 0 0 0.5rem;
+  color: #111827;
+}
+
+.order-card p {
+  margin: 0.3rem 0;
+  color: #374151;
+}
+
+.order-tags {
+  display: flex;
+  gap: 0.75rem;
+  margin: 0.5rem 0;
+}
+
+.status, .payment {
+  font-size: 0.75rem;
+  padding: 0.25rem 0.6rem;
+  border-radius: 20px;
+  text-transform: capitalize;
+  font-weight: 500;
+}
+
+.status.pending {
+  background-color: #fef9c3;
+  color: #92400e;
+}
+.status.confirmed {
+  background-color: #d1fae5;
+  color: #065f46;
+}
+.status.delivered {
+  background-color: #e0f2fe;
+  color: #0369a1;
+}
+
+.payment.paid {
+  background-color: #bbf7d0;
+  color: #166534;
+}
+.payment.unpaid {
+  background-color: #fee2e2;
+  color: #991b1b;
+}
+
+.order-date {
+  font-size: 0.85rem;
+  color: #6b7280;
+}
