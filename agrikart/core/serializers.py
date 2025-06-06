@@ -40,12 +40,16 @@ class DeliverySerializer(serializers.ModelSerializer):
 from .models import UserProfile, Client
 
 class UserSignupSerializer(serializers.ModelSerializer):
-    role = serializers.ChoiceField(choices=[('farmer', 'Farmer'), ('buyer', 'Buyer')])
-    address = serializers.CharField(max_length=255)
+    role = serializers.ChoiceField(
+        choices=[('farmer', 'Farmer'), ('buyer', 'Buyer')],
+        write_only=True  # ✅ input only
+    )
+    address = serializers.CharField(max_length=255, write_only=True)
+    role_display = serializers.SerializerMethodField()  # ✅ output
 
     class Meta:
         model = User
-        fields = ['username', 'email', 'password', 'role', 'address']
+        fields = ['username', 'email', 'password', 'role', 'address', 'role_display']
         extra_kwargs = {'password': {'write_only': True}}
 
     def create(self, validated_data):
@@ -53,7 +57,7 @@ class UserSignupSerializer(serializers.ModelSerializer):
         address = validated_data.pop('address')
         user = User.objects.create_user(**validated_data)
 
-        # 👇 Manually create the UserProfile immediately
+        # Manually create user profile
         UserProfile.objects.create(user=user, role=role)
 
         if role == 'buyer':
@@ -62,3 +66,10 @@ class UserSignupSerializer(serializers.ModelSerializer):
             Farmer.objects.create(name=user.username, phone="0000000000", village="Unknown", registered_via_whatsapp=True, address=address)
 
         return user
+
+    def get_role_display(self, obj):
+        try:
+            return obj.userprofile.role
+        except:
+            return None
+
