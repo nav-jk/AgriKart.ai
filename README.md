@@ -1,1 +1,1 @@
-"# AgriKart.ai" 
+Initial draft of Agrikart.ai
