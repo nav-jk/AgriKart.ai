@@ -1,1 +1,1 @@
-Initial draft of Agrikart.ai
+Initial draft of AgriKart.ai
