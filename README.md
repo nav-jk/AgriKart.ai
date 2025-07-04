@@ -1,1 +1,1 @@
-Initial draft of AgriKart.ai
+Initial draft of AgriKart.ai. Not under further development!
